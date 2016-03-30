@@ -52,11 +52,24 @@ private slots:
 
 private:
     Ui::ArmRule *ui;
-    float tetaBase;
-    float tetaOmbro;
-    float tetaCotovelo;
-    float tetaPunho;
-    float aberturaGarra;
+
+    int serial_retorno;
+
+    int calcular_posicao_base(float teta);
+    int calcular_posicao_ombro(float teta);
+    int calcular_posicao_cotovelo(float teta);
+    int calcular_posicao_punho(float teta);
+    int calcular_posicao_garra(float abertura);
+
+    void calcular_ponto(float tetaBase, float tetaOmbro, float tetaCotovelo, float tetaPunho, float &x, float &y);
+
+    void enviar_base();
+    void enviar_ombro();
+    void enviar_cotovelo();
+    void enviar_punho();
+    void enviar_garra();
+
+    void clean();
 };
 
 #endif // ARMRULE_H
