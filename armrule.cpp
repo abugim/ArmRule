@@ -1,7 +1,8 @@
 #include "armrule.h"
 #include "ui_armrule.h"
+extern "C" {
 #include "include/ufrn_al5d.h"
-
+}
 #include <QString>
 #include <QListWidgetItem>
 
