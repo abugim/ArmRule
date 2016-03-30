@@ -1,5 +1,10 @@
 #ifndef ARMRULE_H
 #define ARMRULE_H
+#define L1 1
+#define L2 2
+#define L3 3
+#define L4 4
+
 
 #include <QMainWindow>
 
@@ -14,6 +19,9 @@ class ArmRule : public QMainWindow
 public:
     explicit ArmRule(QWidget *parent = 0);
     ~ArmRule();
+
+    int T01[4][4];
+    double resultado[4][4];
 
 private slots:
     void on_dialBase_sliderReleased();
@@ -61,8 +69,8 @@ private:
     int calcular_posicao_punho(float teta);
     int calcular_posicao_garra(float abertura);
 
-    void calcular_ponto(float tetaBase, float tetaOmbro, float tetaCotovelo, float tetaPunho, float &x, float &y);
-
+    void calcular_ponto(double tetaBase, double tetaOmbro, double  tetaCotovelo, double tetaPunho, double &x, double &y);
+    void multiplicarMatrizes(double A[4][4], double B[4][4]);
     void enviar_base();
     void enviar_ombro();
     void enviar_cotovelo();

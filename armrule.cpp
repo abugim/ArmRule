@@ -178,7 +178,7 @@ void ArmRule::enviar_garra()
 void ArmRule::on_buttonSalvar_clicked()
 {
     // Calculo Cinematica
-    float x, y;
+    double x, y;
     calcular_ponto(0, 0, 0, 0, x, y);
 
     QListWidgetItem *novo_ponto = new QListWidgetItem();
@@ -187,13 +187,57 @@ void ArmRule::on_buttonSalvar_clicked()
     ui->listaPontos->addItem(novo_ponto);
 }
 
-void ArmRule::calcular_ponto(float tetaBase, float tetaOmbro, float tetaCotovelo, float tetaPunho, float &x, float &y)
+void ArmRule::calcular_ponto(double tetaBase, double tetaOmbro, double tetaCotovelo, double tetaPunho, double &x, double &y)
 {
-    x = 2.7;
-    y = 3.14;
+    double T10[4][4] = {{cos(tetaBase),-sin(tetaBase),0,0},{sin(tetaBase),cos(tetaBase),0, 0},{0, 0, 1, L1}, {0, 0, 0, 1}};
+    double T21[4][4] = {{cos(tetaOmbro),-sin(tetaOmbro),0,0},{0,0,-1,0},{sin(tetaOmbro),cos(tetaOmbro), 0, 0}, {0, 0, 0, 1}};
+    double T32[4][4] = {{cos(tetaCotovelo),-sin(tetaCotovelo),0,L2},{sin(tetaCotovelo),cos(tetaCotovelo),0,0}, {0, 0,1,0},{0,0,0,1}};
+    double T43[4][4] = {{cos(tetaPunho),-sin(tetaPunho),0,L3},{sin(tetaPunho),cos(tetaPunho),0,0}, {0, 0,1,0},{0,0,0,1}};
+    double T54[4][4] = {{1, 0, 0, L4}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0,0,0,1}};
+
+
+    multiplicarMatrizes(T10, T21);
+    multiplicarMatrizes(resultado,T32);
+    multiplicarMatrizes(resultado, T43);
+    multiplicarMatrizes(resultado, T54);
+
+    double T50[4][4];
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+            T50[i][j] = resultado[i][j];
+        }
+    }
+
+
+    x = T50[0][4];
+    y = T50[1][4];
 }
 
 void ArmRule::on_buttonLimparLista_clicked()
 {
     ui->listaPontos->clear();
+}
+void ArmRule::multiplicarMatrizes(double A[4][4], double B[4][4]){
+
+    double C[4][4];
+
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+            C[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+            for(int k = 0; k < 4; k++){
+                C[i][j] += A[i][k]*B[k][i];
+            }
+        }
+    }
+
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+            resultado[i][j] = C[i][j];
+        }
+    }
 }
