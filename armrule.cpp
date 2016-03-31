@@ -1,4 +1,5 @@
 #include "armrule.h"
+#include <QDebug>
 #include "ui_armrule.h"
 extern "C" {
 #include "include/ufrn_al5d.h"
@@ -20,6 +21,7 @@ ArmRule::ArmRule(QWidget *parent) :
 
     ufrn_header();
     serial_retorno = abrir_porta();
+
 }
 
 ArmRule::~ArmRule()
@@ -62,25 +64,29 @@ void ArmRule::on_dialGarra_valueChanged(int value)
 
 int ArmRule::calcular_posicao_base(float teta)
 {
-    int pos = (teta / (2380 - 500)) + 500;
+    //int pos = (teta / (2380 - 500)) + 500;
+    int pos = -teta*10 + 1550;
     return trava(0, pos);
 }
 
 int ArmRule::calcular_posicao_ombro(float teta)
 {
-    int pos = (teta / (2000 - 1200)) + 1200;
+    //int pos = (teta / (2000 - 1200)) + 1200;
+    int pos = 600+8.889*teta;
     return trava(1, pos);
 }
 
 int ArmRule::calcular_posicao_cotovelo(float teta)
 {
-    int pos = (teta / (2100 - 1100)) + 1100;
+    //int pos = (teta / (2100 - 1100)) + 1100;
+    int pos = 750- 10*teta;
     return trava(2, pos);
 }
 
 int ArmRule::calcular_posicao_punho(float teta)
 {
-    int pos = (teta / (2500 - 500)) + 500;
+    //int pos = (teta / (2500 - 500)) + 500;
+    int pos = 1441.667+10.278*teta;
     return trava(3, pos);
 }
 
@@ -201,6 +207,7 @@ void ArmRule::calcular_ponto(double tetaBase, double tetaOmbro, double tetaCotov
     multiplicarMatrizes(resultado, T43);
     multiplicarMatrizes(resultado, T54);
 
+
     double T50[4][4];
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++){
@@ -230,7 +237,7 @@ void ArmRule::multiplicarMatrizes(double A[4][4], double B[4][4]){
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++){
             for(int k = 0; k < 4; k++){
-                C[i][j] += A[i][k]*B[k][i];
+                C[i][j] += A[i][k]*B[k][j];
             }
         }
     }
