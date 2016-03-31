@@ -72,7 +72,9 @@ int ArmRule::calcular_posicao_base(float teta)
 int ArmRule::calcular_posicao_ombro(float teta)
 {
     //int pos = (teta / (2000 - 1200)) + 1200;
-    int pos = 600+8.889*teta;
+   // int pos = 1200+ 8.889*teta; era 600
+   int pos = teta*(-50.0/9.0) + 2000;
+
     return trava(1, pos);
 }
 
@@ -92,7 +94,8 @@ int ArmRule::calcular_posicao_punho(float teta)
 
 int ArmRule::calcular_posicao_garra(float abertura)
 {
-    int pos = (abertura / (2400 - 1500)) + 1500;
+    //int pos = (abertura / (2400 - 1500)) + 1500;
+    int pos = abertura*(9) + 1500;
     return trava(4, pos);
 }
 
@@ -164,6 +167,7 @@ void ArmRule::enviar_ombro()
     QString comando;
     comando = "#1P" + QString::number(calcular_posicao_ombro(ui->dialOmbro->value())) + "S100";
     enviar_comando(strdup(comando.toStdString().c_str()), serial_retorno);
+     qDebug() << comando;
 }
 
 void ArmRule::enviar_cotovelo()
@@ -185,6 +189,7 @@ void ArmRule::enviar_garra()
     QString comando;
     comando = "#4P" + QString::number(calcular_posicao_garra(ui->dialGarra->value())) + "S100";
     enviar_comando(strdup(comando.toStdString().c_str()), serial_retorno);
+    qDebug() << comando;
 }
 
 void ArmRule::on_buttonSalvar_clicked()
