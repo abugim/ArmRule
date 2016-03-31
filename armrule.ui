@@ -68,8 +68,11 @@
               <height>80</height>
              </size>
             </property>
+            <property name="minimum">
+             <number>-90</number>
+            </property>
             <property name="maximum">
-             <number>360</number>
+             <number>90</number>
             </property>
            </widget>
           </item>
@@ -148,8 +151,11 @@
               <height>80</height>
              </size>
             </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
             <property name="maximum">
-             <number>360</number>
+             <number>135</number>
             </property>
            </widget>
           </item>
@@ -228,8 +234,11 @@
               <height>80</height>
              </size>
             </property>
+            <property name="minimum">
+             <number>-135</number>
+            </property>
             <property name="maximum">
-             <number>360</number>
+             <number>90</number>
             </property>
            </widget>
           </item>
@@ -308,8 +317,11 @@
               <height>80</height>
              </size>
             </property>
+            <property name="minimum">
+             <number>-90</number>
+            </property>
             <property name="maximum">
-             <number>360</number>
+             <number>90</number>
             </property>
            </widget>
           </item>

@@ -123,26 +123,32 @@ void ArmRule::on_dialGarra_sliderReleased()
 
 void ArmRule::on_editBase_returnPressed()
 {
+    ui->dialBase->setValue(ui->editBase->text().toInt());
     enviar_base();
 }
 
 void ArmRule::on_editOmbro_returnPressed()
 {
+    ui->dialOmbro->setValue(ui->editOmbro->text().toInt());
     enviar_ombro();
 }
 
 void ArmRule::on_editCotovelo_returnPressed()
 {
+    ui->dialCotovelo->setValue(ui->editCotovelo->text().toInt());
     enviar_cotovelo();
+    qDebug() << "enter pressed cotovelo" << ui->editCotovelo->text();
 }
 
 void ArmRule::on_editPunho_returnPressed()
 {
+    ui->dialPunho->setValue(ui->editPunho->text().toInt());
     enviar_punho();
 }
 
 void ArmRule::on_editGarra_returnPressed()
 {
+    ui->dialGarra->setValue(ui->editGarra->text().toInt());
     enviar_garra();
 }
 
