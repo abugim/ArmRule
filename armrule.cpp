@@ -71,18 +71,25 @@ int ArmRule::calcular_posicao_base(float teta)
 
 int ArmRule::calcular_posicao_ombro(float teta)
 {
-    //int pos = (teta / (2000 - 1200)) + 1200;
-   // int pos = 1200+ 8.889*teta; era 600
-   int pos = teta*(-50.0/9.0) + 2000;
+    //int pos = (double) ((double) teta /0.09) + 500;
 
-    return trava(1, pos);
+    //int pos = 1200- 8.889*teta;
+    //int pos = teta*(-50.0/9.0) + 2000;
+   // pos = (pos - 500) * 0.09;
+    int pos = 673.33 + 8.4*teta;
+    qDebug()<<pos;
+
+    return pos;//trava(1, pos);
 }
 
 int ArmRule::calcular_posicao_cotovelo(float teta)
 {
     //int pos = (teta / (2100 - 1100)) + 1100;
-    int pos = 750- 10*teta;
-    return trava(2, pos);
+    // int pos = (double) ((double) teta /0.09) + 500;
+    //int pos = 750- 10*teta;
+    int pos = 1631 -7.778*teta;
+    qDebug() << "Pos" <<pos;
+    return pos;//trava(2, pos);
 }
 
 int ArmRule::calcular_posicao_punho(float teta)
@@ -196,7 +203,7 @@ void ArmRule::on_buttonSalvar_clicked()
 {
     // Calculo Cinematica
     double x, y;
-    calcular_ponto(0, 0, 0, 0, x, y);
+    calcular_ponto(ui->dialBase->value(), ui->dialOmbro->value(), ui->dialCotovelo->value(), ui->dialPunho->value(), x, y);
 
     QListWidgetItem *novo_ponto = new QListWidgetItem();
     novo_ponto->setText("(" + QString::number(x) + "; " + QString::number(y) + ")");
@@ -219,16 +226,10 @@ void ArmRule::calcular_ponto(double tetaBase, double tetaOmbro, double tetaCotov
     multiplicarMatrizes(resultado, T54);
 
 
-    double T50[4][4];
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++){
-            T50[i][j] = resultado[i][j];
-        }
-    }
 
 
-    x = T50[0][4];
-    y = T50[1][4];
+    x = resultado[0][3];
+    y = resultado[1][3];
 }
 
 void ArmRule::on_buttonLimparLista_clicked()

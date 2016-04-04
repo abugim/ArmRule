@@ -1,9 +1,10 @@
 #ifndef ARMRULE_H
 #define ARMRULE_H
-#define L1 1
-#define L2 2
-#define L3 3
-#define L4 4
+#define L1 7.3
+#define L2 14.8
+#define L3 18.5
+#define L4 8.7
+
 
 
 #include <QMainWindow>
@@ -20,7 +21,7 @@ public:
     explicit ArmRule(QWidget *parent = 0);
     ~ArmRule();
 
-    int T01[4][4];
+
     double resultado[4][4];
 
 private slots:
