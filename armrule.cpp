@@ -1,5 +1,6 @@
 #include "armrule.h"
 #include <QDebug>
+#include <QtMath>
 #include "ui_armrule.h"
 extern "C" {
 #include "include/ufrn_al5d.h"
@@ -22,7 +23,7 @@ ArmRule::ArmRule(QWidget *parent) :
     ufrn_header();
     serial_retorno = abrir_porta();
 
-    //enviar_comando("#0P1550T5000#1P1422T5000#2P1644T5000#3P1442T5000#4P2400T5000", serial_retorno);
+    enviar_comando(strdup("#0P1550T5000#1P1422T5000#2P1644T5000#3P1442T5000#4P2400T5000"), serial_retorno);
 }
 
 ArmRule::~ArmRule()
@@ -202,20 +203,20 @@ void ArmRule::on_buttonSalvar_clicked()
 
 void ArmRule::calcular_ponto(double tetaBase, double tetaOmbro, double tetaCotovelo, double tetaPunho, double &x, double &y)
 {
-    double T10[4][4] = {{cos(tetaBase),-sin(tetaBase),0,0},{sin(tetaBase),cos(tetaBase),0, 0},{0, 0, 1, L1}, {0, 0, 0, 1}};
-    double T21[4][4] = {{cos(tetaOmbro),-sin(tetaOmbro),0,0},{0,0,-1,0},{sin(tetaOmbro),cos(tetaOmbro), 0, 0}, {0, 0, 0, 1}};
-    double T32[4][4] = {{cos(tetaCotovelo),-sin(tetaCotovelo),0,L2},{sin(tetaCotovelo),cos(tetaCotovelo),0,0}, {0, 0,1,0},{0,0,0,1}};
-    double T43[4][4] = {{cos(tetaPunho),-sin(tetaPunho),0,L3},{sin(tetaPunho),cos(tetaPunho),0,0}, {0, 0,1,0},{0,0,0,1}};
+    tetaBase = qDegreesToRadians(tetaBase);
+    tetaOmbro = qDegreesToRadians(tetaOmbro);
+    tetaCotovelo = qDegreesToRadians(tetaCotovelo);
+    tetaPunho = qDegreesToRadians(tetaPunho);
+    double T10[4][4] = {{cos(tetaBase),(-1)*sin(tetaBase),0,0},{sin(tetaBase),cos(tetaBase),0, 0},{0, 0, 1, L1}, {0, 0, 0, 1}};
+    double T21[4][4] = {{cos(tetaOmbro),(-1)*sin(tetaOmbro),0,0},{0,0,-1,0},{sin(tetaOmbro),cos(tetaOmbro), 0, 0}, {0, 0, 0, 1}};
+    double T32[4][4] = {{cos(tetaCotovelo),(-1)*sin(tetaCotovelo),0,L2},{sin(tetaCotovelo),cos(tetaCotovelo),0,0}, {0, 0,1,0},{0,0,0,1}};
+    double T43[4][4] = {{cos(tetaPunho),(-1)*sin(tetaPunho),0,L3},{sin(tetaPunho),cos(tetaPunho),0,0}, {0, 0,1,0},{0,0,0,1}};
     double T54[4][4] = {{1, 0, 0, L4}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0,0,0,1}};
-
 
     multiplicarMatrizes(T10, T21);
     multiplicarMatrizes(resultado,T32);
     multiplicarMatrizes(resultado, T43);
     multiplicarMatrizes(resultado, T54);
-
-
-
 
     x = resultado[0][3];
     y = resultado[1][3];
