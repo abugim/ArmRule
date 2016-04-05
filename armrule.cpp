@@ -22,6 +22,7 @@ ArmRule::ArmRule(QWidget *parent) :
     ufrn_header();
     serial_retorno = abrir_porta();
 
+    //enviar_comando("#0P1550T5000#1P1422T5000#2P1644T5000#3P1442T5000#4P2400T5000", serial_retorno);
 }
 
 ArmRule::~ArmRule()
@@ -64,44 +65,32 @@ void ArmRule::on_dialGarra_valueChanged(int value)
 
 int ArmRule::calcular_posicao_base(float teta)
 {
-    //int pos = (teta / (2380 - 500)) + 500;
     int pos = -teta*10 + 1550;
     return trava(0, pos);
 }
 
 int ArmRule::calcular_posicao_ombro(float teta)
 {
-    //int pos = (double) ((double) teta /0.09) + 500;
-
-    //int pos = 1200- 8.889*teta;
-    //int pos = teta*(-50.0/9.0) + 2000;
-   // pos = (pos - 500) * 0.09;
     int pos = 673.33 + 8.4*teta;
     qDebug()<<pos;
-
     return pos;//trava(1, pos);
 }
 
 int ArmRule::calcular_posicao_cotovelo(float teta)
 {
-    //int pos = (teta / (2100 - 1100)) + 1100;
-    // int pos = (double) ((double) teta /0.09) + 500;
-    //int pos = 750- 10*teta;
-    int pos = 1631 -7.778*teta;
+    int pos = 931 - 7.778*teta;
     qDebug() << "Pos" <<pos;
     return pos;//trava(2, pos);
 }
 
 int ArmRule::calcular_posicao_punho(float teta)
 {
-    //int pos = (teta / (2500 - 500)) + 500;
-    int pos = 1441.667+10.278*teta;
+    int pos = 1441.667 + 10.278*teta;
     return trava(3, pos);
 }
 
 int ArmRule::calcular_posicao_garra(float abertura)
 {
-    //int pos = (abertura / (2400 - 1500)) + 1500;
     int pos = abertura*(9) + 1500;
     return trava(4, pos);
 }
