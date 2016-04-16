@@ -312,10 +312,10 @@ void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, d
     QString posCotovelo = QString::number(calcular_posicao_cotovelo(thetaCotovelo));
     QString posPunho = QString::number(calcular_posicao_punho(thetaPunho));
 
-    ui->edtInvBase->setText(QString::number(qRadiansToDegrees(thetaBase)));
-    ui->edtInvOmbro->setText(QString::number(qRadiansToDegrees(thetaOmbro)));
-    ui->edtInvCotovelo->setText(QString::number(qRadiansToDegrees(thetaCotovelo)));
-    ui->edtInvPunho->setText(QString::number(qRadiansToDegrees(thetaPunho)));
+    ui->edtInvBase->setText(QString::number(qRadiansToDegrees(thetaBase), 'f', 3));
+    ui->edtInvOmbro->setText(QString::number(qRadiansToDegrees(thetaOmbro), 'f', 3));
+    ui->edtInvCotovelo->setText(QString::number(qRadiansToDegrees(thetaCotovelo), 'f', 3));
+    ui->edtInvPunho->setText(QString::number(qRadiansToDegrees(thetaPunho), 'f', 3));
 
     QString comando = ("#0P"+posBase+"T5000#1P"+posOmbro+"T5000#2P"+posCotovelo+"T5000#3P"+posPunho+"T5000#4P2400T5000");
 
