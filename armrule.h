@@ -59,6 +59,8 @@ private slots:
 
     void on_buttonLimparLista_clicked();
 
+    void on_btnInversa_clicked();
+
 private:
     Ui::ArmRule *ui;
 
@@ -71,6 +73,7 @@ private:
     int calcular_posicao_garra(float abertura);
 
     void calcular_ponto(double tetaBase, double tetaOmbro, double  tetaCotovelo, double tetaPunho, double &x, double &y);
+    void calcularCinematicaInversa(double posX,double posY,double posZ, double orientacao);
     void multiplicarMatrizes(double A[4][4], double B[4][4]);
     void enviar_base();
     void enviar_ombro();
