@@ -1,13 +1,12 @@
 #ifndef ARMRULE_H
 #define ARMRULE_H
-#define L1 7.3
-#define L2 14.8
-#define L3 18.5
-#define L4 8.7
-
-
+#define L1 6.73
+#define L2 14.6
+#define L3 18.73
+#define L4 8.57
 
 #include <QMainWindow>
+#include <QDebug>
 
 namespace Ui {
 class ArmRule;

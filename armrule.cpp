@@ -72,7 +72,8 @@ int ArmRule::calcular_posicao_base(float teta)
 
 int ArmRule::calcular_posicao_ombro(float teta)
 {
-    int pos = 673.33 + 8.4*teta;
+//    int pos = 673.33 + 8.4*teta;
+    int pos = 500 + teta/0.09;
     qDebug()<<pos;
     return pos;//trava(1, pos);
 }
@@ -203,10 +204,12 @@ void ArmRule::on_buttonSalvar_clicked()
 
 void ArmRule::calcular_ponto(double tetaBase, double tetaOmbro, double tetaCotovelo, double tetaPunho, double &x, double &y)
 {
+    double phi = tetaOmbro + tetaCotovelo + tetaPunho;
     tetaBase = qDegreesToRadians(tetaBase);
     tetaOmbro = qDegreesToRadians(tetaOmbro);
     tetaCotovelo = qDegreesToRadians(tetaCotovelo);
     tetaPunho = qDegreesToRadians(tetaPunho);
+
     double T10[4][4] = {{cos(tetaBase),(-1)*sin(tetaBase),0,0},{sin(tetaBase),cos(tetaBase),0, 0},{0, 0, 1, L1}, {0, 0, 0, 1}};
     double T21[4][4] = {{cos(tetaOmbro),(-1)*sin(tetaOmbro),0,0},{0,0,-1,0},{sin(tetaOmbro),cos(tetaOmbro), 0, 0}, {0, 0, 0, 1}};
     double T32[4][4] = {{cos(tetaCotovelo),(-1)*sin(tetaCotovelo),0,L2},{sin(tetaCotovelo),cos(tetaCotovelo),0,0}, {0, 0,1,0},{0,0,0,1}};
@@ -218,8 +221,14 @@ void ArmRule::calcular_ponto(double tetaBase, double tetaOmbro, double tetaCotov
     multiplicarMatrizes(resultado, T43);
     multiplicarMatrizes(resultado, T54);
 
-    x = resultado[0][3];
-    y = resultado[1][3];
+    // x = resultado[0][3];
+    // y = resultado[1][3];
+
+    x = qCos(tetaBase)*(L2*qCos(tetaOmbro) + L3*qCos(tetaOmbro + tetaCotovelo) + L4*qCos(tetaOmbro + tetaCotovelo + tetaPunho));
+    y = qSin(tetaBase)*(L2*qCos(tetaOmbro) + L3*qCos(tetaOmbro + tetaCotovelo) + L4*qCos(tetaOmbro + tetaCotovelo + tetaPunho));
+    double z = L1 + L2*qSin(tetaOmbro) + L3*qSin(tetaOmbro + tetaCotovelo) + L4*qSin(tetaOmbro + tetaCotovelo + tetaPunho);
+
+    qDebug() << x << y << z << phi;
 }
 
 void ArmRule::on_buttonLimparLista_clicked()
@@ -263,16 +272,17 @@ void ArmRule::on_btnInversa_clicked()
 }
 
 
-void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, double orientacao){
-
+void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, double orientacao)
+{
+    orientacao = qDegreesToRadians(orientacao);
     double lTotalXY = qSqrt(qPow(posY,2) + qPow(posX,2));
     double sinThetaBase = posY/lTotalXY;
     double cosThetaBase = posX/lTotalXY;
 
     double thetaBase = atan2(sinThetaBase, cosThetaBase);
 
-    double x4 =  (cos(qDegreesToRadians(orientacao)))*L4;
-    double z4 =  (sin(qDegreesToRadians(orientacao)))*L4;
+    double x4 =  (cos(orientacao))*L4;
+    double z4 =  (sin(orientacao))*L4;
 
     double x41 = lTotalXY - x4;
     double z41 = posZ - L1 - z4;
@@ -302,13 +312,15 @@ void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, d
     QString posCotovelo = QString::number(calcular_posicao_cotovelo(thetaCotovelo));
     QString posPunho = QString::number(calcular_posicao_punho(thetaPunho));
 
-    ui->edtInvBase->setText(QString::number(thetaBase));
-    ui->edtInvOmbro->setText(QString::number(thetaOmbro));
-    ui->edtInvCotovelo->setText(QString::number(thetaCotovelo));
-    ui->edtInvPunho->setText(QString::number((thetaPunho)));
+    ui->edtInvBase->setText(QString::number(qRadiansToDegrees(thetaBase), 'f', 3));
+    ui->edtInvOmbro->setText(QString::number(qRadiansToDegrees(thetaOmbro), 'f', 3));
+    ui->edtInvCotovelo->setText(QString::number(qRadiansToDegrees(thetaCotovelo), 'f', 3));
+    ui->edtInvPunho->setText(QString::number(qRadiansToDegrees(thetaPunho), 'f', 3));
 
     QString comando = ("#0P"+posBase+"T5000#1P"+posOmbro+"T5000#2P"+posCotovelo+"T5000#3P"+posPunho+"T5000#4P2400T5000");
 
+
+    // 27.1834 0 23.0493 2
     enviar_comando(strdup(comando.toStdString().c_str())
                    , serial_retorno);
 
