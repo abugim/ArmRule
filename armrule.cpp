@@ -288,7 +288,7 @@ void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, d
     double z41 = posZ - L1 - z4;
 
     double cosThetaCotovelo = (qPow(x41, 2) + qPow(z41, 2) - qPow(L2, 2) - qPow(L3,2))/(2*L2*L3);
-    double sinThetaCotovelo = qSqrt(1 - qPow(cosThetaCotovelo,2));
+    double sinThetaCotovelo = (-1)*qSqrt(1 - qPow(cosThetaCotovelo,2));
 
     double thetaCotovelo = atan2(sinThetaCotovelo, cosThetaCotovelo);
 
