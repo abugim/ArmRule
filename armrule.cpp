@@ -22,6 +22,7 @@ ArmRule::ArmRule(QWidget *parent) :
 
     ufrn_header();
     serial_retorno = abrir_porta();
+    configurar_porta(serial_retorno);
 
     enviar_comando(strdup("#0P1550T5000#1P1422T5000#2P1644T5000#3P1442T5000#4P2400T5000"), serial_retorno);
 }
@@ -73,14 +74,15 @@ int ArmRule::calcular_posicao_base(float teta)
 int ArmRule::calcular_posicao_ombro(float teta)
 {
 //    int pos = 673.33 + 8.4*teta;
-    int pos = 500 + teta/0.09;
+//    int pos = 500 + teta/0.09;
+    int pos = 688 + 8.156*teta;
     qDebug()<<pos;
     return pos;//trava(1, pos);
 }
 
 int ArmRule::calcular_posicao_cotovelo(float teta)
 {
-    int pos = 931 - 7.778*teta;
+    int pos = 934.857 - 8.184*teta;
     qDebug() << "Pos" <<pos;
     return pos;//trava(2, pos);
 }
@@ -124,32 +126,32 @@ void ArmRule::on_dialGarra_sliderReleased()
 
 void ArmRule::on_editBase_returnPressed()
 {
-    ui->dialBase->setValue(ui->editBase->text().toInt());
+    ui->dialBase->setValue((int)ui->editBase->text().toDouble());
     enviar_base();
 }
 
 void ArmRule::on_editOmbro_returnPressed()
 {
-    ui->dialOmbro->setValue(ui->editOmbro->text().toInt());
+    ui->dialOmbro->setValue((int)ui->editOmbro->text().toDouble());
     enviar_ombro();
 }
 
 void ArmRule::on_editCotovelo_returnPressed()
 {
-    ui->dialCotovelo->setValue(ui->editCotovelo->text().toInt());
+    ui->dialCotovelo->setValue((int)ui->editCotovelo->text().toDouble());
     enviar_cotovelo();
     qDebug() << "enter pressed cotovelo" << ui->editCotovelo->text();
 }
 
 void ArmRule::on_editPunho_returnPressed()
 {
-    ui->dialPunho->setValue(ui->editPunho->text().toInt());
+    ui->dialPunho->setValue((int)ui->editPunho->text().toDouble());
     enviar_punho();
 }
 
 void ArmRule::on_editGarra_returnPressed()
 {
-    ui->dialGarra->setValue(ui->editGarra->text().toInt());
+    ui->dialGarra->setValue((int)ui->editGarra->text().toDouble());
     enviar_garra();
 }
 
@@ -194,7 +196,7 @@ void ArmRule::on_buttonSalvar_clicked()
 {
     // Calculo Cinematica
     double x, y;
-    calcular_ponto(ui->dialBase->value(), ui->dialOmbro->value(), ui->dialCotovelo->value(), ui->dialPunho->value(), x, y);
+    calcular_ponto(ui->editBase->text().toDouble(), ui->editOmbro->text().toDouble(), ui->editCotovelo->text().toDouble(), ui->editPunho->text().toDouble(), x, y);
 
     QListWidgetItem *novo_ponto = new QListWidgetItem();
     novo_ponto->setText("(" + QString::number(x) + "; " + QString::number(y) + ")");
@@ -307,10 +309,10 @@ void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, d
 
     double thetaPunho = orientacao - thetaOmbro - thetaCotovelo;
 
-    QString posBase = QString::number(calcular_posicao_base(thetaBase));
-    QString posOmbro = QString::number(calcular_posicao_ombro(thetaOmbro));
-    QString posCotovelo = QString::number(calcular_posicao_cotovelo(thetaCotovelo));
-    QString posPunho = QString::number(calcular_posicao_punho(thetaPunho));
+    QString posBase = QString::number(calcular_posicao_base(qRadiansToDegrees(thetaBase)));
+    QString posOmbro = QString::number(calcular_posicao_ombro(qRadiansToDegrees(thetaOmbro)));
+    QString posCotovelo = QString::number(calcular_posicao_cotovelo(qRadiansToDegrees(thetaCotovelo)));
+    QString posPunho = QString::number(calcular_posicao_punho(qRadiansToDegrees(thetaPunho)));
 
     ui->edtInvBase->setText(QString::number(qRadiansToDegrees(thetaBase), 'f', 3));
     ui->edtInvOmbro->setText(QString::number(qRadiansToDegrees(thetaOmbro), 'f', 3));
@@ -319,6 +321,7 @@ void ArmRule::calcularCinematicaInversa(double posX, double posY, double posZ, d
 
     QString comando = ("#0P"+posBase+"T5000#1P"+posOmbro+"T5000#2P"+posCotovelo+"T5000#3P"+posPunho+"T5000#4P2400T5000");
 
+    qDebug() << "inversa" << comando;
 
     // 27.1834 0 23.0493 2
     enviar_comando(strdup(comando.toStdString().c_str())
