@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "armrulelib.h"
+#include "armrulelib_novo.h"
 
 struct Ponto {
 	double x;
@@ -12,16 +12,17 @@ void mover_suave(Ponto source, Ponto dest);
 void init_pontos(Ponto pontos[6]);
 
 int main(int argc, char** argv) {
+	init();
 	if (argc < 7) {
 		printf("Quantidade de argumentos insuficiente: %d", argc);
 		exit(1);
 	}
 
 	Ponto p_preto;
-	p_preto.x = 29.327;
-	p_preto.y = 1.024;
-	p_preto.z = -0.994;
-	p_preto.phi = -90;
+	p_preto.x = 38;
+	p_preto.y = 2;
+	p_preto.z = 16;
+	p_preto.phi = 0;
 
 	Ponto pontos[6];
 	init_pontos(pontos);
@@ -29,13 +30,13 @@ int main(int argc, char** argv) {
 	// Mover para caneta
 	mover(p_preto.x, p_preto.y, p_preto.z, p_preto.phi);
 	// Pegar caneta
-	pega();
+	pegar();
 
 	Ponto p_ant = p_preto;
-	
+
 	// Mover entre cada ponto
 	for (int i = 0; i < 6; i++) {
-		Ponto p = pontos[atoi(argv[i+1]);
+		Ponto p = pontos[atoi(argv[i+1])];
 		mover_suave(p_ant, p);
 		p_ant = p;
 	}
@@ -57,10 +58,10 @@ void mover_suave(Ponto source, Ponto dest) {
 }
 
 void init_pontos(Ponto pontos[6]) {
-	pontos[0].x = 22.711;	pontos[0].y = -2.387;	pontos[0].z = -2.648;	pontos[0].phi = -96;
-	pontos[1].x = 14.503;	pontos[1].y = -4.434;	pontos[1].z = -3.467;	pontos[1].phi = -102;
-	pontos[2].x = 7.327;	pontos[2].y = -1.691;	pontos[2].z = -3.920;	pontos[2].phi = -110;
-	pontos[3].x = 7.327;	pontos[3].y = -1.691;	pontos[3].z = -3.920;	pontos[3].phi = -110;
-	pontos[4].x = 14.503;	pontos[4].y = -4.434;	pontos[4].z = -3.467;	pontos[4].phi = -102;
-	pontos[5].x = 22.711;	pontos[5].y = -2.387;	pontos[5].z = -2.648;	pontos[5].phi = -96;
+	pontos[0].x = 33;	pontos[0].y = -2;	pontos[0].z = 16;	pontos[0].phi = 0;
+	pontos[1].x = 27.5;	pontos[1].y = -5;	pontos[1].z = 13;	pontos[1].phi = 0;
+	pontos[2].x = 21;	pontos[2].y = -2;	pontos[2].z = 12;	pontos[2].phi = 0;
+	pontos[3].x = 21;	pontos[3].y = 3.5;	pontos[3].z = 12;	pontos[3].phi = 0;
+	pontos[4].x = 27;	pontos[4].y = 7;	pontos[4].z = 13.5;	pontos[4].phi = 0;
+	pontos[5].x = 33;	pontos[5].y = 5;	pontos[5].z = 16;	pontos[5].phi = 0;
 }
