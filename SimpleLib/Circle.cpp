@@ -29,31 +29,39 @@ int main(int argc, char** argv) {
 
 	// Mover para caneta
 	mover(p_preto.x, p_preto.y, p_preto.z, p_preto.phi);
+
 	// Pegar caneta
-	pegar();
+	
 
 	Ponto p_ant = p_preto;
-
+	printf("pre sleep\n");
+	sleep(5);
+	printf("pos sleep\n");
 	// Mover entre cada ponto
 	for (int i = 0; i < 6; i++) {
-		Ponto p = pontos[atoi(argv[i+1])];
+		Ponto p = pontos[atoi(argv[i+1]) - 1];
 		mover_suave(p_ant, p);
+
 		p_ant = p;
+		sleep(5);
 	}
 
 	// Mover para preto
 	mover_suave(p_ant, p_preto);
+	sleep(5);
+	printf("PONTO PRETO\n");
 }
 
 void mover_suave(Ponto source, Ponto dest) {
 	Ponto p;
 	p.x = (dest.x - source.x) / 10.0;
 	p.y = (dest.y - source.y) / 10.0;
-	p.z = (dest.z - source.z) / 10.0;
-	p.phi = (dest.phi - source.phi) / 10.0;
+	p.z = dest.z;
+	p.phi = dest.phi;
 
 	for (int i = 0; i < 10; i++) {
-		mover(source.x + p.x * (i+1), source.y + p.y * (i+1), source.z + p.z * (i+1), source.phi + p.phi * (i+1));
+		mover(source.x + p.x * (i+1), source.y + p.y * (i+1), p.z, p.phi);
+		sleep(1);
 	}
 }
 
